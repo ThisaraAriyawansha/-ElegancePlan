@@ -17,7 +17,7 @@ const Homepage = () => {
         </div>
       </header>
 
-      <section className="hero-section" style={{ backgroundImage: `url('your-background-image.jpg')` }}>
+      <section className="hero-section" style={{ backgroundImage: `url('../image/home.jpeg')` }}>
         <h1 className="title">Welcome to ElegancePlan</h1>
         <p className="subtitle">Design your dream home with ease</p>
         <Link to="/design" className="cta-button">Start Designing</Link>
