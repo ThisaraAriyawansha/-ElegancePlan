@@ -6,39 +6,71 @@ body {
     background-color: #f4f4f4;
     color: #333;
 }
-
-/* Navbar */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    background-color: #333;
-    color: white;
     position: fixed;
-    width: 100%;
     top: 0;
-    z-index: 1000;
+    right: 0;
+    min-width: 98%;
+    padding: 20px;
+    display: flex;
+    background: rgba(0, 0, 0, 0); /* Fully transparent background */
+    color: white;
+    z-index: 1000; /* Ensure it is on top */
+    align-items: center; /* Center items vertically */
 }
 
 .navbar-brand a {
-    font-size: 1.5em;
-    text-decoration: none;
+    justify-content: flex-start;
+    flex-grow: 4;
+    font-size: 30px;
     color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif; /* Using Times New Roman for the links */
+}
+
+
+.navbar-links {
+    display: flex;
+    gap: 15px; /* Increased space between links for better spacing */
+    justify-content: flex-end;
+    flex-grow: 1;
+    font-family: 'Times New Roman', Times, serif; /* Using Times New Roman for the links */
 }
 
 .navbar-links a {
+    position: relative;
     color: white;
     text-decoration: none;
-    margin: 0 15px;
-    font-weight: 500;
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 10px 20px; /* Slightly increased padding */
+    overflow: hidden; /* Hide the overflow to enable animation */
+    transition: color 0.3s ease; /* Smooth transition for text color */
+}
+
+.navbar-links a::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2.5px;
+    bottom: 0;
+    left: -100%;
+    background-color: #ffffff; /* White running line */
+    transition: left 0.8s ease; /* Smooth running line animation */
+}
+
+.navbar-links a:hover::before {
+    left: 0; /* Slide the line in */
 }
 
 .navbar-links a:hover {
-    text-decoration: underline;
+    color: #c0c0c0; /* Slightly lighter text color on hover */
 }
 
 /* Hero Section */
 .hero-section {
+    padding-top: 80px; /* Adjust padding so content doesn't overlap with the navbar */
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -51,6 +83,7 @@ body {
     padding: 0 20px;
     animation: fadeIn 2s ease-in-out;
 }
+
 
 @keyframes fadeIn {
     from { opacity: 0; }
