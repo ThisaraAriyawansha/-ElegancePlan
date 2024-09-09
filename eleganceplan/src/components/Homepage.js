@@ -36,7 +36,7 @@ const Homepage = () => {
       <section className="hero-section" style={{ backgroundImage: `url(${homeImage})` }}>
         <h1 className="title">Welcome to ElegancePlan</h1>
         <p className="subtitle">Design your dream home with ease</p>
-        <Link to="/design" className="cta-button">Start Designing</Link>
+        <Link to="/startDesign" className="cta-button">Start Designing</Link>
       </section>
 
       {/* Cards section with imported images */}
