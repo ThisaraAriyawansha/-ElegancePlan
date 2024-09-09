@@ -20,7 +20,7 @@ const Homepage = () => {
           <Link to="/">
             <i className="fas fa-home"></i> Home
           </Link>
-          <Link to="/design">
+          <Link to="/startDesign">
             <i className="fas fa-paint-brush"></i> Start Designing
           </Link>
           <Link to="/saved-designs">

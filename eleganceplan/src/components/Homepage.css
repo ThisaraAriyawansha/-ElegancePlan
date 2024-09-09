@@ -1,17 +1,18 @@
 /* Base Styles */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Times New Roman', Times, serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
     color: #333;
 }
+
 .navbar {
     position: fixed;
     top: 0;
     right: 0;
     min-width: 98%;
-    padding: 20px;
+    padding: 10px 20px; /* Reduced padding */
     display: flex;
     background: rgba(0, 0, 0, 0); /* Fully transparent background */
     color: white;
@@ -22,17 +23,20 @@ body {
 .navbar-brand a {
     justify-content: flex-start;
     flex-grow: 4;
-    font-size: 30px;
+    font-size: 24px; /* Reduced font size */
     color: white;
     text-decoration: none;
     font-weight: bold;
     font-family: 'Times New Roman', Times, serif; /* Using Times New Roman for the links */
 }
 
+.navbar-brand:hover {
+    transform: translateY(-3px); /* Subtle lift effect */
+}
 
 .navbar-links {
     display: flex;
-    gap: 15px; /* Increased space between links for better spacing */
+    gap: 10px; /* Adjusted space between links */
     justify-content: flex-end;
     flex-grow: 1;
     font-family: 'Times New Roman', Times, serif; /* Using Times New Roman for the links */
@@ -43,8 +47,8 @@ body {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.2em;
-    padding: 10px 20px; /* Slightly increased padding */
+    font-size: 1em; /* Reduced font size */
+    padding: 8px 15px; /* Reduced padding */
     overflow: hidden; /* Hide the overflow to enable animation */
     transition: color 0.3s ease; /* Smooth transition for text color */
 }
@@ -53,7 +57,7 @@ body {
     content: '';
     position: absolute;
     width: 100%;
-    height: 2.5px;
+    height: 2px; /* Reduced line height */
     bottom: 0;
     left: -100%;
     background-color: #ffffff; /* White running line */
@@ -70,7 +74,7 @@ body {
 
 /* Hero Section */
 .hero-section {
-    padding-top: 80px; /* Adjust padding so content doesn't overlap with the navbar */
+    padding-top: 70px; /* Adjust padding so content doesn't overlap with the navbar */
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -83,7 +87,6 @@ body {
     padding: 0 20px;
     animation: fadeIn 2s ease-in-out;
 }
-
 
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -113,17 +116,21 @@ body {
 }
 
 .cta-button {
-    background-color: #ff9800;
-    color: white;
-    padding: 15px 30px;
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white */
+    color: #ffffff;
+    padding: 5px 20px;
     text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    border-radius: 50px;
+    font-size: 1.2em;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    border: 2px solid #ffffff;
+    transition: background-color 0.3s, transform 0.3s;
+    display: inline-block;
 }
 
 .cta-button:hover {
-    background-color: #e68900;
+    background-color: rgba(255, 255, 255, 0.4); /* Slightly more opaque on hover */
+    transform: translateY(-3px); /* Subtle lift effect */
 }
 
 /* Card Section */
@@ -182,3 +189,57 @@ body {
     background-color: #333;
     color: white;
 }
+
+/* Ensure icons visibility */
+.navbar-links a i {
+    margin-right: 8px; /* Space between icon and text */
+    font-size: 1em; /* Size of the icon */
+    vertical-align: middle; /* Align icon with text */
+}
+
+/* Subtle Fade and Scale Animation */
+/* Soft Glowing Effect */
+
+
+
+
+/* Soft Glowing Effect */
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 15px rgba(255, 255, 255, 1);
+    }
+    100% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+}
+
+.hero-section h1 {
+    animation: glow 2s ease-in-out infinite; /* Apply the glowing effect */
+}
+
+
+
+/* Subtle Fade and Scale Animation */
+@keyframes fadeScale {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.navbar-brand {
+    animation: fadeScale 3s ease-in-out infinite; /* Apply the subtle fade and scale animation */
+}
+
+
