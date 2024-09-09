@@ -1,62 +1,118 @@
-import React, { useState } from 'react';
-import { DndProvider, useDrag, useDrop } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
-import './StartDesigning.css'; // Create this CSS file for styling
+import React, { useState, useRef, useEffect } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Canvas, Text } from 'fabric'; // Import specific classes
+import './StartDesigning.css';
 
-// Furniture Item Component
-const FurnitureItem = ({ id, name, type, moveFurniture }) => {
-  const [{ isDragging }, drag] = useDrag({
-    type: 'FURNITURE',
-    item: { id, type },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
+// Initial furniture items
+const initialFurnitureItems = [
+  { id: '1', name: 'Sofa' },
+  { id: '2', name: 'Table' },
+  { id: '3', name: 'Chair' },
+];
 
-  return (
-    <div ref={drag} className={`furniture-item ${isDragging ? 'dragging' : ''}`}>
-      {name}
-    </div>
-  );
-};
+// FurnitureItem Component
+const FurnitureItem = ({ item, index }) => (
+  <Draggable draggableId={item.id} index={index}>
+    {(provided) => (
+      <div
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        {...provided.dragHandleProps}
+        className="furniture-item"
+      >
+        {item.name}
+      </div>
+    )}
+  </Draggable>
+);
 
 // Room Component
-const Room = () => {
-  const [{ isOver }, drop] = useDrop({
-    accept: 'FURNITURE',
-    drop: (item) => console.log(`Dropped item: ${item.id}`),
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-    }),
-  });
+const Room = ({ onDrop }) => {
+  const canvasRef = useRef(null);
+  const [canvas, setCanvas] = useState(null);
+
+  useEffect(() => {
+    const fabricCanvas = new Canvas(canvasRef.current, {
+      backgroundColor: 'lightgrey',
+    });
+    setCanvas(fabricCanvas);
+
+    return () => {
+      fabricCanvas.dispose(); // Cleanup on unmount
+    };
+  }, []);
 
   return (
-    <div ref={drop} className={`room ${isOver ? 'highlight' : ''}`}>
-      <h2>Design Your Room</h2>
-      {/* Furniture items will be dropped here */}
+    <div className="room">
+      <canvas ref={canvasRef} width="800" height="600" />
     </div>
   );
 };
 
 const StartDesigning = () => {
-  const [furnitureItems] = useState([
-    { id: 1, name: 'Sofa', type: 'furniture' },
-    { id: 2, name: 'Table', type: 'furniture' },
-    { id: 3, name: 'Chair', type: 'furniture' },
-  ]);
+  const [furnitureItems, setFurnitureItems] = useState(initialFurnitureItems);
+  const [draggedItem, setDraggedItem] = useState(null);
+
+  const handleDrop = (pointer) => {
+    if (draggedItem) {
+      const fabricCanvas = document.querySelector('canvas');
+      if (fabricCanvas) {
+        const canvas = new Canvas(fabricCanvas);
+        const newItem = new Text(draggedItem.name, {
+          left: pointer.x,
+          top: pointer.y,
+          draggable: true,
+        });
+
+        canvas.add(newItem);
+        canvas.renderAll();
+      }
+    }
+  };
+
+  const onDragStart = (start) => {
+    const item = furnitureItems.find(f => f.id === start.draggableId);
+    if (item) {
+      setDraggedItem(item);
+    }
+  };
+
+  const onDragEnd = (result) => {
+    if (!result.destination) return;
+
+    // Use the canvas dimensions for dropping
+    const canvas = document.querySelector('canvas');
+    if (canvas) {
+      const fabricCanvas = new Canvas(canvas);
+      const pointer = fabricCanvas.getPointer({ x: result.destination.droppableId, y: result.destination.droppableId });
+      handleDrop(pointer);
+    }
+  };
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DragDropContext
+      onDragStart={onDragStart}
+      onDragEnd={onDragEnd}
+    >
       <div className="design-container">
-        <aside className="furniture-palette">
-          <h2>Select Furniture</h2>
-          {furnitureItems.map((item) => (
-            <FurnitureItem key={item.id} {...item} />
-          ))}
-        </aside>
+        <Droppable droppableId="furniture" direction="vertical">
+          {(provided) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              className="furniture-palette"
+            >
+              <h2>Select Furniture</h2>
+              {furnitureItems.map((item, index) => (
+                <FurnitureItem key={item.id} item={item} index={index} />
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
         <Room />
       </div>
-    </DndProvider>
+    </DragDropContext>
   );
 };
 
