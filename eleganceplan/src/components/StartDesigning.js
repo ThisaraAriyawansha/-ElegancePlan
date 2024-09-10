@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { Canvas, Text } from 'fabric'; // Import specific fabric components
+import { fabric } from 'fabric'; // Ensure you have installed fabric
 import './StartDesigning.css';
 
 // Initial furniture items
@@ -29,15 +29,14 @@ const FurnitureItem = ({ item, index }) => (
 // Room Component
 const Room = React.forwardRef((props, ref) => {
   const canvasRef = useRef(null);
-  const [fabricCanvas, setFabricCanvas] = useState(null);
 
   useEffect(() => {
-    const canvas = new Canvas(canvasRef.current, {
+    // Initialize fabric.js canvas
+    const canvas = new fabric.Canvas(canvasRef.current, {
       backgroundColor: 'lightgrey',
       width: 800,
       height: 600,
     });
-    setFabricCanvas(canvas);
     if (ref) ref.current = canvas; // Forward the ref to parent component
 
     return () => {
@@ -57,15 +56,15 @@ const StartDesigning = () => {
   const [draggedItem, setDraggedItem] = useState(null);
   const canvasRef = useRef(null); // Reference for the Room canvas
 
-  // Handle the drop of a furniture item on the canvas
-  const handleDrop = (pointer) => {
+  // Handle adding the item to the canvas at a specific location
+  const handleDrop = (x, y) => {
     if (draggedItem && canvasRef.current) {
       const canvas = canvasRef.current;
 
-      // Add the dragged item as fabric text at the pointer location
-      const newItem = new Text(draggedItem.name, {
-        left: pointer.x,
-        top: pointer.y,
+      // Create and add fabric text for the furniture item
+      const newItem = new fabric.Text(draggedItem.name, {
+        left: x,
+        top: y,
         fill: 'black',
         fontSize: 20,
         selectable: true,
@@ -76,33 +75,25 @@ const StartDesigning = () => {
     }
   };
 
-  // Triggered when drag starts
+  // When dragging starts, set the current dragged item
   const onDragStart = (start) => {
     const item = furnitureItems.find(f => f.id === start.draggableId);
-    if (item) {
-      setDraggedItem(item);
-    }
+    setDraggedItem(item);
   };
 
-  // Triggered when drag ends
+  // Handle the drop event and map it to the canvas
   const onDragEnd = (result) => {
-    if (!result.destination) return;
+    if (!result.destination || !canvasRef.current) return;
 
+    // Get the canvas and calculate where to drop the item
     const canvas = canvasRef.current;
-    if (canvas) {
-      // Get mouse pointer coordinates on the canvas
-      const pointer = canvas.getPointer({ x: result.destination.index * 100, y: result.destination.index * 100 });
+    const pointer = canvas.getPointer({ clientX: result.source.index * 100, clientY: result.destination.index * 100 });
 
-      // Handle item drop at the pointer location
-      handleDrop(pointer);
-    }
+    handleDrop(pointer.x, pointer.y); // Drop the item at the calculated position
   };
 
   return (
-    <DragDropContext
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-    >
+    <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div className="design-container">
         <Droppable droppableId="furniture" direction="vertical">
           {(provided) => (
