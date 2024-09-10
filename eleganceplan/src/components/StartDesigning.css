@@ -13,37 +13,42 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #2c3e50;
+  background-color: #4285F4; /* Google Blue */
   color: #fff;
 }
 
 h1 {
-  font-size: 2.5rem;
+  font-size: 2rem; /* Slightly smaller font size */
   margin: 0;
-  color: #ecf0f1;
+  color: #fff;
 }
 
 .delete-all-button {
-  background-color: #e74c3c;
+  background-color: #DB4437; /* Google Red */
   color: #fff;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 6px 12px;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.75rem; /* Smaller font size */
 }
 
 .delete-all-button:hover {
-  background-color: #c0392b;
+  background-color: #C1351D; /* Darker Red */
   transform: scale(1.05);
 }
 
+/* Add a margin-top to create space between the header and body */
 .main-content {
+  min-height: 100%;
   display: flex;
   flex: 1;
-  gap: 20px;
+  gap: 30px;
   overflow: auto;
+  margin-top: 40px; /* Increase this value to adjust the gap */
 }
+
 
 .furniture-selection, .section-controls {
   flex: 1;
@@ -52,12 +57,13 @@ h1 {
 .furniture-item, .draggable-furniture {
   border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 15px;
-  margin: 10px;
+  padding: 8px;
+  margin: 6px;
   cursor: pointer;
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   transition: box-shadow 0.3s ease, transform 0.2s ease;
+  font-size: 0.75rem; /* Smaller font size */
 }
 
 .furniture-item:hover, .draggable-furniture:hover {
@@ -67,27 +73,28 @@ h1 {
 
 .draggable-furniture {
   position: absolute;
-  background-color: #f9f9f9;
+  background-color: #FAFAFA; /* Light Grey */
 }
 
 .delete-button {
-  background-color: #e74c3c;
+  background-color: #DB4437; /* Google Red */
   color: #fff;
   border: none;
-  padding: 6px 10px;
+  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.625rem; /* Even smaller font size */
 }
 
 .delete-button:hover {
-  background-color: #c0392b;
+  background-color: #C1351D; /* Darker Red */
   transform: scale(1.1);
 }
 
 .room-design {
   position: relative;
-  background-color: #ecf0f1;
+  background-color: #F1F3F4; /* Light Grey */
   border: 1px solid #ddd;
   width: 100%;
   height: 100%;
@@ -97,66 +104,65 @@ h1 {
 }
 
 .room-design.over {
-  background-color: #bdc3c7;
+  background-color: #E8EAED; /* Slightly Darker Grey */
 }
 
 .sectional-area {
   position: absolute;
-  border: 2px dashed #34495e;
-  background-color: rgba(200, 200, 200, 0.3);
+  border: 2px dashed #4285F4; /* Google Blue */
+  background-color: rgba(66, 133, 244, 0.3); /* Google Blue with opacity */
   border-radius: 8px;
 }
 
 .section-controls {
+  min-height: 100%;
   padding: 20px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
 .section-controls-item {
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Reduced margin */
 }
 
 .section-controls-item h3 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.125rem; /* Smaller font size */
 }
 
 .section-controls-item label {
   display: block;
-  margin: 10px 0;
+  margin: 5px 0; /* Reduced margin */
 }
 
 .section-controls-item input {
   width: 100%;
-  padding: 8px;
+  padding: 6px; /* Reduced padding */
   border: 1px solid #ddd;
   border-radius: 4px;
   box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-  font-size: 1rem;
+  font-size: 0.875rem; /* Smaller font size */
 }
 
 .apply-button {
-  background-color: #2ecc71;
+  background-color: #34A853; /* Google Green */
   color: white;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
+  padding: 6px 12px; /* Reduced padding */
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  font-size: 0.75rem; /* Smaller font size */
 }
 
 .apply-button:hover {
-  background-color: #27ae60;
+  background-color: #28A745; /* Darker Green */
   transform: scale(1.05);
 }
 
 .furniture-category {
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Reduced margin */
 }
 
 .furniture-category h3 {
-  margin-bottom: 10px;
-  font-size: 1.5rem;
+  margin-bottom: 8px; /* Reduced margin */
+  font-size: 1.25rem; /* Smaller font size */
 }

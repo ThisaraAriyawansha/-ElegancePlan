@@ -292,6 +292,8 @@ const App = () => {
             Delete All Furniture
           </button>
         </header>
+
+        <br></br><br></br><br></br>
         <div className="main-content">
           <FurnitureSelection onSelectFurniture={handleFurnitureSelection} />
           <RoomDesign furniture={furniture} sections={sections} setFurniture={setFurniture} />
