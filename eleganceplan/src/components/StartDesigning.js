@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
-import { useDrag, useDrop } from 'react-dnd';
+import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { DndProvider } from 'react-dnd';
 import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
 
 // Drag-and-Drop Types
 const FurnitureType = 'FURNITURE';
-const SectionType = 'SECTION';
 
 // Furniture Item Component
 const FurnitureItem = ({ id, type, name }) => {
@@ -77,96 +75,22 @@ const DraggableFurniture = ({ id, type, left, top, onDelete, children }) => {
   );
 };
 
-// Resizable Section Component
-const ResizableSection = ({ id, name, left, top, width, height, onResize, onDelete, children }) => {
-  const [, drag] = useDrag(() => ({
-    type: SectionType,
-    item: { id, left, top, width, height },
-  }));
-
-  const [resizing, setResizing] = useState(false);
-
-  const handleMouseDown = (e) => {
-    e.preventDefault();
-    setResizing(true);
-  };
-
-  const handleMouseMove = (e) => {
-    if (resizing) {
-      const newWidth = e.clientX - left;
-      const newHeight = e.clientY - top;
-      onResize(id, Math.max(newWidth, 50), Math.max(newHeight, 50));
-    }
-  };
-
-  const handleMouseUp = () => {
-    setResizing(false);
-  };
-
-  React.useEffect(() => {
-    if (resizing) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-    } else {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    }
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-    };
-  }, [resizing]);
-
+// SectionalArea Component
+const SectionalArea = ({ id, name, left, top, width, height }) => {
   return (
     <div
-      ref={drag}
       style={{
         position: 'absolute',
         left: `${left}px`,
         top: `${top}px`,
         width: `${width}px`,
         height: `${height}px`,
-        backgroundColor: 'lightgrey',
         border: '1px solid black',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '10px',
+        backgroundColor: 'rgba(0, 0, 255, 0.1)',
         boxSizing: 'border-box',
-        overflow: 'hidden',
       }}
     >
-      {children}
-      <button
-        onClick={(e) => {
-          e.stopPropagation(); // Prevents triggering drag
-          onDelete(id);
-        }}
-        style={{
-          position: 'absolute',
-          top: '5px',
-          right: '5px',
-          backgroundColor: 'red',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          padding: '4px 8px',
-        }}
-      >
-        X
-      </button>
-      <div
-        onMouseDown={handleMouseDown}
-        style={{
-          position: 'absolute',
-          bottom: '5px',
-          right: '5px',
-          width: '10px',
-          height: '10px',
-          backgroundColor: 'darkgray',
-          cursor: 'nwse-resize',
-        }}
-      ></div>
+      <h4 style={{ textAlign: 'center' }}>{name}</h4>
     </div>
   );
 };
@@ -174,10 +98,14 @@ const ResizableSection = ({ id, name, left, top, width, height, onResize, onDele
 // Room Design Component
 const RoomDesign = () => {
   const [furniture, setFurniture] = useState([]);
-  const [sections, setSections] = useState([]);
+  const [sections, setSections] = useState([
+    { id: '1', name: 'Living Room', left: 0, top: 0, width: 400, height: 300 },
+    { id: '2', name: 'Kitchen', left: 400, top: 0, width: 200, height: 300 },
+    { id: '3', name: 'Bathroom', left: 0, top: 300, width: 200, height: 300 },
+  ]);
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: [FurnitureType, SectionType],
+    accept: FurnitureType,
     drop: (item, monitor) => {
       const container = document.querySelector('#room-design');
       const containerRect = container.getBoundingClientRect();
@@ -187,29 +115,15 @@ const RoomDesign = () => {
         const x = clientOffset.x - containerRect.left;
         const y = clientOffset.y - containerRect.top;
 
-        if (item.type === FurnitureType) {
-          setFurniture((prev) => [
-            ...prev,
-            {
-              ...item,
-              id: uuidv4(),
-              left: Math.max(0, Math.min(containerRect.width - 100, x - 50)),
-              top: Math.max(0, Math.min(containerRect.height - 100, y - 50)),
-            },
-          ]);
-        } else if (item.type === SectionType) {
-          setSections((prev) => [
-            ...prev,
-            {
-              ...item,
-              id: uuidv4(),
-              left: Math.max(0, Math.min(containerRect.width - 100, x - 50)),
-              top: Math.max(0, Math.min(containerRect.height - 100, y - 50)),
-              width: 200,
-              height: 200,
-            },
-          ]);
-        }
+        setFurniture((prev) => [
+          ...prev,
+          {
+            ...item,
+            id: uuidv4(),
+            left: Math.max(0, Math.min(containerRect.width - 100, x - 50)),
+            top: Math.max(0, Math.min(containerRect.height - 100, y - 50)),
+          },
+        ]);
       }
     },
     collect: (monitor) => ({
@@ -217,24 +131,12 @@ const RoomDesign = () => {
     }),
   }));
 
-  const handleDeleteFurniture = (id) => {
+  const handleDelete = (id) => {
     setFurniture((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const handleDeleteSection = (id) => {
-    setSections((prev) => prev.filter((item) => item.id !== id));
-    setFurniture((prev) => prev.filter((item) => !sections.some((section) => section.id === id)));
-  };
-
-  const handleResizeSection = (id, width, height) => {
-    setSections((prev) => prev.map((section) =>
-      section.id === id ? { ...section, width, height } : section
-    ));
   };
 
   const handleClean = () => {
     setFurniture([]);
-    setSections([]);
   };
 
   return (
@@ -252,7 +154,7 @@ const RoomDesign = () => {
       }}
     >
       {sections.map((section) => (
-        <ResizableSection
+        <SectionalArea
           key={section.id}
           id={section.id}
           name={section.name}
@@ -260,11 +162,7 @@ const RoomDesign = () => {
           top={section.top}
           width={section.width}
           height={section.height}
-          onResize={handleResizeSection}
-          onDelete={handleDeleteSection}
-        >
-          {section.name}
-        </ResizableSection>
+        />
       ))}
       {furniture.map((item) => (
         <DraggableFurniture
@@ -273,7 +171,7 @@ const RoomDesign = () => {
           type={item.type}
           left={item.left}
           top={item.top}
-          onDelete={handleDeleteFurniture}
+          onDelete={handleDelete}
         >
           {item.type}
         </DraggableFurniture>
@@ -298,37 +196,105 @@ const RoomDesign = () => {
   );
 };
 
+// Section Controls Component
+const SectionControls = ({ sections, setSections }) => {
+  const handleChange = (e, id, field) => {
+    const value = parseInt(e.target.value, 10);
+    setSections((prev) =>
+      prev.map((section) =>
+        section.id === id ? { ...section, [field]: value } : section
+      )
+    );
+  };
+
+  return (
+    <div>
+      <h2>Adjust Sections</h2>
+      {sections.map((section) => (
+        <div key={section.id} style={{ marginBottom: '20px' }}>
+          <h3>{section.name}</h3>
+          <label>
+            Left:
+            <input
+              type="number"
+              value={section.left}
+              onChange={(e) => handleChange(e, section.id, 'left')}
+            />
+          </label>
+          <label>
+            Top:
+            <input
+              type="number"
+              value={section.top}
+              onChange={(e) => handleChange(e, section.id, 'top')}
+            />
+          </label>
+          <label>
+            Width:
+            <input
+              type="number"
+              value={section.width}
+              onChange={(e) => handleChange(e, section.id, 'width')}
+            />
+          </label>
+          <label>
+            Height:
+            <input
+              type="number"
+              value={section.height}
+              onChange={(e) => handleChange(e, section.id, 'height')}
+            />
+          </label>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // Furniture Selection Component
 const FurnitureSelection = () => {
-  // Define an expanded range of furniture items
   const categories = {
     LivingRoom: [
       { id: 1, type: 'Sofa', name: 'Sofa' },
       { id: 2, type: 'CoffeeTable', name: 'Coffee Table' },
+      { id: 3, type: 'Armchair', name: 'Armchair' },
+      { id: 4, type: 'TVStand', name: 'TV Stand' },
+      { id: 5, type: 'Bookshelf', name: 'Bookshelf' },
+    ],
+    DiningRoom: [
+      { id: 6, type: 'DiningTable', name: 'Dining Table' },
+      { id: 7, type: 'DiningChair', name: 'Dining Chair' },
+      { id: 8, type: 'Buffet', name: 'Buffet' },
+      { id: 9, type: 'Barstool', name: 'Barstool' },
     ],
     Bedroom: [
-      { id: 3, type: 'Bed', name: 'Bed' },
-      { id: 4, type: 'Nightstand', name: 'Nightstand' },
+      { id: 10, type: 'Bed', name: 'Bed' },
+      { id: 11, type: 'Nightstand', name: 'Nightstand' },
+      { id: 12, type: 'Dresser', name: 'Dresser' },
+      { id: 13, type: 'Wardrobe', name: 'Wardrobe' },
     ],
-    Kitchen: [
-      { id: 5, type: 'DiningTable', name: 'Dining Table' },
-      { id: 6, type: 'Refrigerator', name: 'Refrigerator' },
+    Office: [
+      { id: 14, type: 'Desk', name: 'Desk' },
+      { id: 15, type: 'OfficeChair', name: 'Office Chair' },
+      { id: 16, type: 'Bookshelf', name: 'Bookshelf' },
+      { id: 17, type: 'FileCabinet', name: 'File Cabinet' },
+      { id: 18, type: 'MeetingTable', name: 'Meeting Table' },
     ],
-    // Add other categories as needed
+    Garden: [
+      { id: 19, type: 'OutdoorTable', name: 'Outdoor Table' },
+      { id: 20, type: 'GardenChair', name: 'Garden Chair' },
+      { id: 21, type: 'Umbrella', name: 'Umbrella' },
+      { id: 22, type: 'Planter', name: 'Planter' },
+    ],
   };
 
   return (
-    <div style={{ padding: '10px' }}>
-      {Object.entries(categories).map(([category, items]) => (
-        <div key={category} style={{ marginBottom: '20px' }}>
-          <h4>{category}</h4>
-          {items.map((item) => (
-            <FurnitureItem
-              key={item.id}
-              id={item.id}
-              type={item.type}
-              name={item.name}
-            />
+    <div>
+      {Object.keys(categories).map((category) => (
+        <div key={category}>
+          <h2>{category}</h2>
+          {categories[category].map((item) => (
+            <FurnitureItem key={item.id} id={item.id} type={item.type} name={item.name} />
           ))}
         </div>
       ))}
@@ -336,14 +302,25 @@ const FurnitureSelection = () => {
   );
 };
 
-// App Component
-const App = () => (
-  <DndProvider backend={HTML5Backend}>
-    <div style={{ display: 'flex', height: '100vh' }}>
-      <FurnitureSelection />
-      <RoomDesign />
-    </div>
-  </DndProvider>
-);
+// Main App Component
+const App = () => {
+  const [sections, setSections] = useState([
+    { id: '1', name: 'Living Room', left: 0, top: 0, width: 400, height: 300 },
+    { id: '2', name: 'Kitchen', left: 400, top: 0, width: 200, height: 300 },
+    { id: '3', name: 'Bathroom', left: 0, top: 300, width: 200, height: 300 },
+  ]);
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <FurnitureSelection />
+        <div style={{ flex: 1, marginLeft: '20px' }}>
+          <SectionControls sections={sections} setSections={setSections} />
+          <RoomDesign />
+        </div>
+      </div>
+    </DndProvider>
+  );
+};
 
 export default App;
