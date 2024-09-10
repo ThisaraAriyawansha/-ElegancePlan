@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { v4 as uuidv4 } from 'uuid';
-import './StartDesigning';
+import './StartDesigning.css';
 
 // Drag-and-Drop Types
 const FurnitureType = 'FURNITURE';
@@ -15,19 +15,7 @@ const FurnitureItem = ({ id, type, name, onClick }) => {
   }));
 
   return (
-    <div
-      ref={drag}
-      onClick={onClick}
-      style={{
-        padding: '8px',
-        margin: '4px',
-        backgroundColor: 'lightblue',
-        border: '1px solid black',
-        cursor: 'move',
-        display: 'inline-block',
-        textAlign: 'center',
-      }}
-    >
+    <div ref={drag} onClick={onClick} className="furniture-item">
       {name}
     </div>
   );
@@ -43,36 +31,14 @@ const DraggableFurniture = ({ id, type, left, top, onDelete, children }) => {
   return (
     <div
       ref={drag}
-      style={{
-        position: 'absolute',
-        left: `${left}px`,
-        top: `${top}px`,
-        cursor: 'move',
-        padding: '10px',
-        backgroundColor: 'lightblue',
-        border: '1px solid blue',
-        display: 'flex',
-        alignItems: 'center',
-      }}
+      className="draggable-furniture"
+      style={{ left: `${left}px`, top: `${top}px` }}
     >
       {children}
-      <button
-        onClick={(e) => {
-          e.stopPropagation(); // Prevents triggering drag
-          onDelete(id);
-        }}
-        style={{
-          marginLeft: '8px',
-          backgroundColor: 'red',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          padding: '4px 8px',
-        }}
-      >
-        X
-      </button>
+      <button onClick={(e) => {
+        e.stopPropagation(); // Prevents triggering drag
+        onDelete(id);
+      }} className="delete-button">X</button>
     </div>
   );
 };
@@ -81,18 +47,10 @@ const DraggableFurniture = ({ id, type, left, top, onDelete, children }) => {
 const SectionalArea = ({ id, name, left, top, width, height }) => {
   return (
     <div
-      style={{
-        position: 'absolute',
-        left: `${left}px`,
-        top: `${top}px`,
-        width: `${width}px`,
-        height: `${height}px`,
-        border: '1px solid black',
-        backgroundColor: 'rgba(0, 0, 255, 0.1)',
-        boxSizing: 'border-box',
-      }}
+      className="sectional-area"
+      style={{ left: `${left}px`, top: `${top}px`, width: `${width}px`, height: `${height}px` }}
     >
-      <h4 style={{ textAlign: 'center' }}>{name}</h4>
+      <h4 className="section-title">{name}</h4>
     </div>
   );
 };
@@ -105,7 +63,7 @@ const RoomDesign = ({ furniture, sections, setFurniture }) => {
       const container = document.querySelector('#room-design');
       const containerRect = container.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
-      
+
       if (clientOffset) {
         const x = clientOffset.x - containerRect.left;
         const y = clientOffset.y - containerRect.top;
@@ -134,15 +92,7 @@ const RoomDesign = ({ furniture, sections, setFurniture }) => {
     <div
       id="room-design"
       ref={drop}
-      style={{
-        width: '100%',
-        height: '600px',
-        position: 'relative',
-        border: '1px solid black',
-        backgroundColor: isOver ? 'lightgrey' : 'white',
-        overflow: 'hidden',
-        boxSizing: 'border-box',
-      }}
+      className={`room-design ${isOver ? 'drag-over' : ''}`}
     >
       {sections.map((section) => (
         <SectionalArea
@@ -189,10 +139,10 @@ const SectionControls = ({ sections, setSections }) => {
   };
 
   return (
-    <div>
+    <div className="section-controls">
       <h2>Adjust Sections</h2>
       {updatedSections.map((section) => (
-        <div key={section.id} style={{ marginBottom: '20px' }}>
+        <div key={section.id} className="section-controls-item">
           <h3>{section.name}</h3>
           <label>
             Left:
@@ -228,19 +178,7 @@ const SectionControls = ({ sections, setSections }) => {
           </label>
         </div>
       ))}
-      <button
-        onClick={handleApply}
-        style={{
-          backgroundColor: 'green',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          padding: '8px 16px',
-        }}
-      >
-        Apply
-      </button>
+      <button onClick={handleApply} className="apply-button">Apply</button>
     </div>
   );
 };
@@ -282,10 +220,10 @@ const FurnitureSelection = ({ onSelectFurniture }) => {
   };
 
   return (
-    <div>
+    <div className="furniture-selection">
       <h2>Select Furniture</h2>
       {Object.entries(categories).map(([category, items]) => (
-        <div key={category}>
+        <div key={category} className="category">
           <h3>{category}</h3>
           {items.map((item) => (
             <FurnitureItem
@@ -310,34 +248,19 @@ const App = () => {
     { id: 2, name: 'Dining Room', left: 300, top: 0, width: 300, height: 300 },
     { id: 3, name: 'Bedroom', left: 0, top: 300, width: 300, height: 300 },
     { id: 4, name: 'Office', left: 300, top: 300, width: 300, height: 300 },
-    { id: 5, name: 'Garden', left: 0, top: 600, width: 600, height: 200 },
+    { id: 5, name: 'Garden', left: 600, top: 0, width: 300, height: 600 },
   ]);
-  
-
-  const handleCleanAll = () => {
-    setFurniture([]);
-  };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div style={{ padding: '20px' }}>
-        <FurnitureSelection onSelectFurniture={(item) => setFurniture((prev) => [...prev, { ...item, id: uuidv4(), left: 0, top: 0 }])} />
-        <RoomDesign furniture={furniture} sections={sections} setFurniture={setFurniture} />
-        <SectionControls sections={sections} setSections={setSections} />
-        <button
-          onClick={handleCleanAll}
-          style={{
-            marginTop: '20px',
-            backgroundColor: 'red',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: 'pointer',
-            padding: '8px 16px',
-          }}
-        >
-          Clean All
-        </button>
+      <div className="app">
+        <div className="sidebar">
+          <FurnitureSelection onSelectFurniture={(item) => setFurniture((prev) => [...prev, { ...item, id: uuidv4(), left: 0, top: 0 }])} />
+        </div>
+        <div className="main-content">
+          <SectionControls sections={sections} setSections={setSections} />
+          <RoomDesign furniture={furniture} sections={sections} setFurniture={setFurniture} />
+        </div>
       </div>
     </DndProvider>
   );
