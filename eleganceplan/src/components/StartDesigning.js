@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { v4 as uuidv4 } from 'uuid';
@@ -15,7 +15,11 @@ const FurnitureItem = ({ id, type, name, onClick }) => {
   }));
 
   return (
-    <div ref={drag} onClick={onClick} className="furniture-item">
+    <div
+      ref={drag}
+      onClick={onClick}
+      className="furniture-item"
+    >
       {name}
     </div>
   );
@@ -68,7 +72,7 @@ const RoomDesign = ({ furniture, sections, setFurniture }) => {
       const container = document.querySelector('#room-design');
       const containerRect = container.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
-
+      
       if (clientOffset) {
         const x = clientOffset.x - containerRect.left;
         const y = clientOffset.y - containerRect.top;
@@ -141,35 +145,56 @@ const SectionControls = ({ sections, setSections }) => {
 
   const handleApply = (id) => {
     const updatedSection = updatedSections.find((section) => section.id === id);
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === id ? updatedSection : section
-      )
-    );
-  };
-
-  useEffect(() => {
-    const totalWidth = 900; // total width of the room
-    const totalHeight = 600; // total height of the room
-    let remainingWidth = totalWidth;
-    let remainingHeight = totalHeight;
-
-    updatedSections.forEach((section) => {
-      remainingWidth -= section.width;
-      remainingHeight -= section.height;
+    const remainingSections = updatedSections.filter((section) => section.id !== id);
+  
+    // Update the dimensions of the target section
+    const containerWidth = window.innerWidth;
+    const containerHeight = window.innerHeight;
+  
+    let newLeft = 0;
+    let newTop = 0;
+    const sectionSpacing = 10; // Space between sections
+  
+    const adjustedSections = [];
+    let fit = true;
+  
+    // Resize and reposition sections
+    remainingSections.forEach((section) => {
+      if (fit) {
+        if (newLeft + section.width > containerWidth) {
+          newLeft = 0;
+          newTop += section.height + sectionSpacing;
+        }
+  
+        // Ensure the section fits within the container
+        const updated = {
+          ...section,
+          left: newLeft,
+          top: newTop,
+        };
+  
+        adjustedSections.push(updated);
+  
+        newLeft += section.width + sectionSpacing; // Move to the next position
+      }
     });
-
-    const autoWidth = remainingWidth / (updatedSections.length - 1);
-    const autoHeight = remainingHeight / (updatedSections.length - 1);
-
-    setUpdatedSections((prev) =>
-      prev.map((section, index) => ({
-        ...section,
-        width: section.id === id ? section.width : autoWidth,
-        height: section.id === id ? section.height : autoHeight,
-      }))
-    );
-  }, [updatedSections, setSections]);
+  
+    // Ensure the target section does not overlap and fits in the container
+    const targetSection = {
+      ...updatedSection,
+      left: Math.min(updatedSection.left, containerWidth - updatedSection.width),
+      top: Math.min(updatedSection.top, containerHeight - updatedSection.height),
+    };
+  
+    // Combine updated and adjusted sections
+    const finalSections = [
+      targetSection,
+      ...adjustedSections,
+    ];
+  
+    setSections(finalSections);
+  };
+  
 
   return (
     <div className="section-controls">
@@ -220,6 +245,8 @@ const SectionControls = ({ sections, setSections }) => {
     </div>
   );
 };
+
+
 
 // Furniture Selection Component
 const FurnitureSelection = ({ onSelectFurniture }) => {
@@ -278,44 +305,54 @@ const FurnitureSelection = ({ onSelectFurniture }) => {
   );
 };
 
-// Main StartDesigning Component
-const StartDesigning = () => {
+// Main App Component
+const App = () => {
   const [furniture, setFurniture] = useState([]);
   const [sections, setSections] = useState([
-    { id: 1, name: 'Section 1', left: 50, top: 50, width: 300, height: 200 },
-    { id: 2, name: 'Section 2', left: 400, top: 50, width: 300, height: 200 },
-    { id: 3, name: 'Section 3', left: 50, top: 300, width: 300, height: 200 },
-    { id: 4, name: 'Section 4', left: 400, top: 300, width: 300, height: 200 },
+    { id: 1, name: 'Living Room', left: 0, top: 0, width: 300, height: 300 },
+    { id: 2, name: 'Dining Room', left: 300, top: 0, width: 300, height: 300 },
+    { id: 3, name: 'Bedroom', left: 0, top: 300, width: 300, height: 300 },
+    { id: 4, name: 'Office', left: 300, top: 300, width: 300, height: 300 },
+    { id: 5, name: 'Garden', left: 600, top: 0, width: 300, height: 300 },
   ]);
 
-  const handleSelectFurniture = (item) => {
+  const handleFurnitureSelection = (item) => {
     setFurniture((prev) => [
       ...prev,
       {
         ...item,
         id: uuidv4(),
-        left: 50,
-        top: 50,
+        left: 0,
+        top: 0,
       },
     ]);
   };
 
+  const handleDeleteAll = () => {
+    if (window.confirm('Are you sure you want to delete all furniture items?')) {
+      setFurniture([]);
+    }
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="start-designing">
-        <h1 className='title'>Start Designing Your Room</h1>
-        <div className="design-controls">
-          <FurnitureSelection onSelectFurniture={handleSelectFurniture} />
+      <div className="app">
+        <header className='header'>
+          <h1 className='h11'>Furniture Design Tool</h1>
+          <button onClick={handleDeleteAll} className="delete-all-button">
+            Delete All Furniture
+          </button>
+        </header>
+
+        <br></br><br></br><br></br>
+        <div className="main-content">
+          <FurnitureSelection onSelectFurniture={handleFurnitureSelection} />
+          <RoomDesign furniture={furniture} sections={sections} setFurniture={setFurniture} />
           <SectionControls sections={sections} setSections={setSections} />
         </div>
-        <RoomDesign
-          furniture={furniture}
-          sections={sections}
-          setFurniture={setFurniture}
-        />
       </div>
     </DndProvider>
   );
 };
 
-export default StartDesigning;
+export default App;
