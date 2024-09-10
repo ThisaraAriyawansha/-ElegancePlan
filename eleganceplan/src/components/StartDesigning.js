@@ -15,7 +15,11 @@ const FurnitureItem = ({ id, type, name, onClick }) => {
   }));
 
   return (
-    <div ref={drag} onClick={onClick} className="furniture-item">
+    <div
+      ref={drag}
+      onClick={onClick}
+      className="furniture-item"
+    >
       {name}
     </div>
   );
@@ -35,10 +39,15 @@ const DraggableFurniture = ({ id, type, left, top, onDelete, children }) => {
       style={{ left: `${left}px`, top: `${top}px` }}
     >
       {children}
-      <button onClick={(e) => {
-        e.stopPropagation(); // Prevents triggering drag
-        onDelete(id);
-      }} className="delete-button">X</button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          onDelete(id);
+        }}
+        className="delete-button"
+      >
+        X
+      </button>
     </div>
   );
 };
@@ -50,7 +59,7 @@ const SectionalArea = ({ id, name, left, top, width, height }) => {
       className="sectional-area"
       style={{ left: `${left}px`, top: `${top}px`, width: `${width}px`, height: `${height}px` }}
     >
-      <h4 className="section-title">{name}</h4>
+      <h4>{name}</h4>
     </div>
   );
 };
@@ -63,7 +72,7 @@ const RoomDesign = ({ furniture, sections, setFurniture }) => {
       const container = document.querySelector('#room-design');
       const containerRect = container.getBoundingClientRect();
       const clientOffset = monitor.getClientOffset();
-
+      
       if (clientOffset) {
         const x = clientOffset.x - containerRect.left;
         const y = clientOffset.y - containerRect.top;
@@ -92,7 +101,7 @@ const RoomDesign = ({ furniture, sections, setFurniture }) => {
     <div
       id="room-design"
       ref={drop}
-      className={`room-design ${isOver ? 'drag-over' : ''}`}
+      className={`room-design ${isOver ? 'over' : ''}`}
     >
       {sections.map((section) => (
         <SectionalArea
@@ -178,7 +187,12 @@ const SectionControls = ({ sections, setSections }) => {
           </label>
         </div>
       ))}
-      <button onClick={handleApply} className="apply-button">Apply</button>
+      <button
+        onClick={handleApply}
+        className="apply-button"
+      >
+        Apply
+      </button>
     </div>
   );
 };
@@ -223,7 +237,7 @@ const FurnitureSelection = ({ onSelectFurniture }) => {
     <div className="furniture-selection">
       <h2>Select Furniture</h2>
       {Object.entries(categories).map(([category, items]) => (
-        <div key={category} className="category">
+        <div key={category} className="furniture-category">
           <h3>{category}</h3>
           {items.map((item) => (
             <FurnitureItem
@@ -248,18 +262,40 @@ const App = () => {
     { id: 2, name: 'Dining Room', left: 300, top: 0, width: 300, height: 300 },
     { id: 3, name: 'Bedroom', left: 0, top: 300, width: 300, height: 300 },
     { id: 4, name: 'Office', left: 300, top: 300, width: 300, height: 300 },
-    { id: 5, name: 'Garden', left: 600, top: 0, width: 300, height: 600 },
+    { id: 5, name: 'Garden', left: 600, top: 0, width: 300, height: 300 },
   ]);
+
+  const handleFurnitureSelection = (item) => {
+    setFurniture((prev) => [
+      ...prev,
+      {
+        ...item,
+        id: uuidv4(),
+        left: 0,
+        top: 0,
+      },
+    ]);
+  };
+
+  const handleDeleteAll = () => {
+    if (window.confirm('Are you sure you want to delete all furniture items?')) {
+      setFurniture([]);
+    }
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app">
-        <div className="sidebar">
-          <FurnitureSelection onSelectFurniture={(item) => setFurniture((prev) => [...prev, { ...item, id: uuidv4(), left: 0, top: 0 }])} />
-        </div>
+        <header>
+          <h1>Furniture Design Tool</h1>
+          <button onClick={handleDeleteAll} className="delete-all-button">
+            Delete All Furniture
+          </button>
+        </header>
         <div className="main-content">
-          <SectionControls sections={sections} setSections={setSections} />
+          <FurnitureSelection onSelectFurniture={handleFurnitureSelection} />
           <RoomDesign furniture={furniture} sections={sections} setFurniture={setFurniture} />
+          <SectionControls sections={sections} setSections={setSections} />
         </div>
       </div>
     </DndProvider>
