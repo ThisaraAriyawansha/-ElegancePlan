@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { v4 as uuidv4 } from 'uuid'; // For generating unique IDs
+import { v4 as uuidv4 } from 'uuid';
+import './StartDesigning';
 
 // Drag-and-Drop Types
 const FurnitureType = 'FURNITURE';
 
 // Furniture Item Component
-const FurnitureItem = ({ id, type, name }) => {
+const FurnitureItem = ({ id, type, name, onClick }) => {
   const [, drag] = useDrag(() => ({
     type: FurnitureType,
     item: { id, type },
@@ -16,6 +17,7 @@ const FurnitureItem = ({ id, type, name }) => {
   return (
     <div
       ref={drag}
+      onClick={onClick}
       style={{
         padding: '8px',
         margin: '4px',
@@ -96,14 +98,7 @@ const SectionalArea = ({ id, name, left, top, width, height }) => {
 };
 
 // Room Design Component
-const RoomDesign = () => {
-  const [furniture, setFurniture] = useState([]);
-  const [sections, setSections] = useState([
-    { id: '1', name: 'Living Room', left: 0, top: 0, width: 400, height: 300 },
-    { id: '2', name: 'Kitchen', left: 400, top: 0, width: 200, height: 300 },
-    { id: '3', name: 'Bathroom', left: 0, top: 300, width: 200, height: 300 },
-  ]);
-
+const RoomDesign = ({ furniture, sections, setFurniture }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: FurnitureType,
     drop: (item, monitor) => {
@@ -133,10 +128,6 @@ const RoomDesign = () => {
 
   const handleDelete = (id) => {
     setFurniture((prev) => prev.filter((item) => item.id !== id));
-  };
-
-  const handleClean = () => {
-    setFurniture([]);
   };
 
   return (
@@ -176,41 +167,31 @@ const RoomDesign = () => {
           {item.type}
         </DraggableFurniture>
       ))}
-      <button
-        onClick={handleClean}
-        style={{
-          position: 'absolute',
-          top: '10px',
-          right: '10px',
-          backgroundColor: 'darkred',
-          color: 'white',
-          border: 'none',
-          borderRadius: '4px',
-          cursor: 'pointer',
-          padding: '8px 16px',
-        }}
-      >
-        Clean All
-      </button>
     </div>
   );
 };
 
 // Section Controls Component
 const SectionControls = ({ sections, setSections }) => {
+  const [updatedSections, setUpdatedSections] = useState([...sections]);
+
   const handleChange = (e, id, field) => {
     const value = parseInt(e.target.value, 10);
-    setSections((prev) =>
+    setUpdatedSections((prev) =>
       prev.map((section) =>
         section.id === id ? { ...section, [field]: value } : section
       )
     );
   };
 
+  const handleApply = () => {
+    setSections(updatedSections);
+  };
+
   return (
     <div>
       <h2>Adjust Sections</h2>
-      {sections.map((section) => (
+      {updatedSections.map((section) => (
         <div key={section.id} style={{ marginBottom: '20px' }}>
           <h3>{section.name}</h3>
           <label>
@@ -247,12 +228,25 @@ const SectionControls = ({ sections, setSections }) => {
           </label>
         </div>
       ))}
+      <button
+        onClick={handleApply}
+        style={{
+          backgroundColor: 'green',
+          color: 'white',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+          padding: '8px 16px',
+        }}
+      >
+        Apply
+      </button>
     </div>
   );
 };
 
 // Furniture Selection Component
-const FurnitureSelection = () => {
+const FurnitureSelection = ({ onSelectFurniture }) => {
   const categories = {
     LivingRoom: [
       { id: 1, type: 'Sofa', name: 'Sofa' },
@@ -281,20 +275,26 @@ const FurnitureSelection = () => {
       { id: 18, type: 'MeetingTable', name: 'Meeting Table' },
     ],
     Garden: [
-      { id: 19, type: 'OutdoorTable', name: 'Outdoor Table' },
-      { id: 20, type: 'GardenChair', name: 'Garden Chair' },
-      { id: 21, type: 'Umbrella', name: 'Umbrella' },
-      { id: 22, type: 'Planter', name: 'Planter' },
+      { id: 19, type: 'GardenChair', name: 'Garden Chair' },
+      { id: 20, type: 'SunLounge', name: 'Sun Lounge' },
+      { id: 21, type: 'Planter', name: 'Planter' },
     ],
   };
 
   return (
     <div>
-      {Object.keys(categories).map((category) => (
+      <h2>Select Furniture</h2>
+      {Object.entries(categories).map(([category, items]) => (
         <div key={category}>
-          <h2>{category}</h2>
-          {categories[category].map((item) => (
-            <FurnitureItem key={item.id} id={item.id} type={item.type} name={item.name} />
+          <h3>{category}</h3>
+          {items.map((item) => (
+            <FurnitureItem
+              key={item.id}
+              id={item.id}
+              type={item.type}
+              name={item.name}
+              onClick={() => onSelectFurniture(item)}
+            />
           ))}
         </div>
       ))}
@@ -304,20 +304,40 @@ const FurnitureSelection = () => {
 
 // Main App Component
 const App = () => {
+  const [furniture, setFurniture] = useState([]);
   const [sections, setSections] = useState([
-    { id: '1', name: 'Living Room', left: 0, top: 0, width: 400, height: 300 },
-    { id: '2', name: 'Kitchen', left: 400, top: 0, width: 200, height: 300 },
-    { id: '3', name: 'Bathroom', left: 0, top: 300, width: 200, height: 300 },
+    { id: 1, name: 'Living Room', left: 0, top: 0, width: 300, height: 300 },
+    { id: 2, name: 'Dining Room', left: 300, top: 0, width: 300, height: 300 },
+    { id: 3, name: 'Bedroom', left: 0, top: 300, width: 300, height: 300 },
+    { id: 4, name: 'Office', left: 300, top: 300, width: 300, height: 300 },
+    { id: 5, name: 'Garden', left: 0, top: 600, width: 600, height: 200 },
   ]);
+  
+
+  const handleCleanAll = () => {
+    setFurniture([]);
+  };
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <FurnitureSelection />
-        <div style={{ flex: 1, marginLeft: '20px' }}>
-          <SectionControls sections={sections} setSections={setSections} />
-          <RoomDesign />
-        </div>
+      <div style={{ padding: '20px' }}>
+        <FurnitureSelection onSelectFurniture={(item) => setFurniture((prev) => [...prev, { ...item, id: uuidv4(), left: 0, top: 0 }])} />
+        <RoomDesign furniture={furniture} sections={sections} setFurniture={setFurniture} />
+        <SectionControls sections={sections} setSections={setSections} />
+        <button
+          onClick={handleCleanAll}
+          style={{
+            marginTop: '20px',
+            backgroundColor: 'red',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            padding: '8px 16px',
+          }}
+        >
+          Clean All
+        </button>
       </div>
     </DndProvider>
   );
