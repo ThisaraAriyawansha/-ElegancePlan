@@ -1,45 +1,43 @@
-import React, { useEffect, useRef } from 'react';
-import 'aframe';
-import 'ar.js/aframe/build/aframe-ar.js';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
+import React, { useState } from 'react';
+import DraggableFurniture from './DraggableFurniture';
+import DropZone from './DropZone';
 
-const StartDesign = () => {
-  const arSceneRef = useRef(null);
+const StartDesigning = () => {
+  const [furniture, setFurniture] = useState([
+    { id: 1, type: 'Sofa', left: 100, top: 100 },
+    { id: 2, type: 'Table', left: 200, top: 200 },
+  ]);
 
-  useEffect(() => {
-    // Initialization or setup logic if needed
-  }, []);
+  const handleDrop = (item, offset) => {
+    setFurniture((prevFurniture) =>
+      prevFurniture.map((f) =>
+        f.id === item.id
+          ? { ...f, left: offset.x, top: offset.y }
+          : f
+      )
+    );
+  };
 
   return (
     <div>
       <h1>Start Designing Your Space</h1>
-      <div>
-        <p>Use the AR view to place furniture in your room and visualize your design.</p>
-        <a-scene embedded arjs='trackingMethod: best;'>
-          <a-marker preset='hiro'>
-            <a-box position='0 0.5 0' rotation='0 45 0' color='blue'>
-              <a-text value='Furniture' align='center' position='0 1 0'></a-text>
-            </a-box>
-          </a-marker>
-          <a-entity camera></a-entity>
-        </a-scene>
-      </div>
-
-      {/* Three.js Viewer for Desktop or Non-AR */}
-      <div style={{ height: '400px' }}>
-        <Canvas>
-          <ambientLight />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <OrbitControls />
-          <mesh>
-            <boxGeometry args={[1, 1, 1]} />
-            <meshStandardMaterial color='orange' />
-          </mesh>
-        </Canvas>
-      </div>
+      <DropZone onDrop={handleDrop}>
+        {furniture.map((f) => (
+          <DraggableFurniture
+            key={f.id}
+            id={f.id}
+            type={f.type}
+            left={f.left}
+            top={f.top}
+          >
+            <div style={{ padding: '10px', backgroundColor: 'lightblue', border: '1px solid blue' }}>
+              {f.type}
+            </div>
+          </DraggableFurniture>
+        ))}
+      </DropZone>
     </div>
   );
 };
 
-export default StartDesign;
+export default StartDesigning;
