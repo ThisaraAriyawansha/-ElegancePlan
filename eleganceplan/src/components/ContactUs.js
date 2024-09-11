@@ -37,7 +37,10 @@ const ContactUs = () => {
     e.preventDefault();
     if (validateForm()) {
       try {
+        console.log('Sending form data:', formData); // Debugging: Log form data
+    
         await axios.post('http://localhost:5000/api/contact/submit', formData);
+    
         alert('Message sent!');
         setFormData({
           name: '',
@@ -46,11 +49,11 @@ const ContactUs = () => {
         });
       } catch (error) {
         alert('Failed to send message');
-        console.error(error);
+        console.error('Error in handleSubmit:', error); // Log errors for debugging
       }
     }
   };
-
+  
   return (
     <motion.div
       className="contact-us-page"
