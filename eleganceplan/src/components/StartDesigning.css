@@ -40,6 +40,8 @@ margin: 0;
   text-align: center;
 }
 
+
+
 /* Home link styling */
 .home-link {
   display: flex;
@@ -279,6 +281,19 @@ margin: 0;
   position: absolute;
   top: 0;
   right: 0;
+}
+
+/* In your CSS file (e.g., StartDesigning.css) */
+
+/* Page container with initial hidden state */
+.page-container {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+/* Page container with visible state */
+.page-container.visible {
+  opacity: 1;
 }
 
 

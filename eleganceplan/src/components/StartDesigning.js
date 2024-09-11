@@ -372,7 +372,12 @@ const App = () => {
     });
   };
 
+
+
+
+  
   return (
+    
     <DndProvider backend={HTML5Backend}>
       <div className="app">
       <header className='header'>
