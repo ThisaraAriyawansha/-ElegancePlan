@@ -94,7 +94,6 @@ body {
 
 .progress-bar {
   height: 5px;
-  width: ${({ progress }) => progress}%;
   background-color: #6200ea;
 }
 

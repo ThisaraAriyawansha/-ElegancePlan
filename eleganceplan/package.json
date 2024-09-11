@@ -12,6 +12,7 @@
     "aframe": "^1.6.0",
     "ar.js": "^2.2.2",
     "fabric": "^4.6.0",
+    "framer-motion": "^11.5.4",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "react": "^18.3.1",
