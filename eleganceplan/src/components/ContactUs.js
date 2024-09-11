@@ -1,8 +1,9 @@
-// src/components/ContactUs.js
 import React, { useState } from 'react';
 import './ContactUs.css';
 import { Link } from 'react-router-dom';
 import { FaHome, FaPaintBrush, FaSave, FaEnvelope } from 'react-icons/fa';
+import { motion } from 'framer-motion';
+import axios from 'axios';
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -32,21 +33,31 @@ const ContactUs = () => {
     return Object.keys(formErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Handle form submission logic here, e.g., send data to an API
-      alert('Message sent!');
-      setFormData({
-        name: '',
-        email: '',
-        message: '',
-      });
+      try {
+        await axios.post('http://localhost:5000/api/contact/submit', formData);
+        alert('Message sent!');
+        setFormData({
+          name: '',
+          email: '',
+          message: '',
+        });
+      } catch (error) {
+        alert('Failed to send message');
+        console.error(error);
+      }
     }
   };
 
   return (
-    <div className="contact-us-page" >
+    <motion.div
+      className="contact-us-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }}
+    >
       <header className="navbarr">
         <div className="navbar-brand">
           <Link to="/">
@@ -70,11 +81,17 @@ const ContactUs = () => {
       </header>
 
       <main className="contact-us-container">
-        <h1>Contact Us</h1>
+        <motion.h1
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          Contact Us
+        </motion.h1>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="name">Name</label>
-            <input
+            <motion.input
               type="text"
               id="name"
               name="name"
@@ -82,13 +99,16 @@ const ContactUs = () => {
               onChange={handleChange}
               className={errors.name ? 'error' : ''}
               placeholder="Your name"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             />
             {errors.name && <span className="error-message">{errors.name}</span>}
           </div>
 
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input
+            <motion.input
               type="email"
               id="email"
               name="email"
@@ -96,32 +116,45 @@ const ContactUs = () => {
               onChange={handleChange}
               className={errors.email ? 'error' : ''}
               placeholder="Your email address"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             />
             {errors.email && <span className="error-message">{errors.email}</span>}
           </div>
 
           <div className="form-group">
             <label htmlFor="message">Message</label>
-            <textarea
+            <motion.textarea
               id="message"
               name="message"
               value={formData.message}
               onChange={handleChange}
               className={errors.message ? 'error' : ''}
               placeholder="Your message"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
             />
             {errors.message && <span className="error-message">{errors.message}</span>}
           </div>
 
-          <button type="submit" className="submit-button">Send Message</button>
+          <motion.button
+            type="submit"
+            className="submit-button"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            Send Message
+          </motion.button>
         </form>
-        
       </main>
-      <br/><br/><br/>
+      
       <footer className="footerrr">
         <p>&copy; {new Date().getFullYear()} ElegancePlan. All rights reserved.</p>
       </footer>
-    </div>
+    </motion.div>
   );
 };
 
