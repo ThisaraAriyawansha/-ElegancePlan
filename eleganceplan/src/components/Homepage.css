@@ -133,77 +133,7 @@ body {
     transform: translateY(-3px); /* Subtle lift effect */
 }
 
-/* Card Section */
-.cards-section {
-    padding: 60px 20px;
-    text-align: center;
-    background-color: #f9f9f9;
-}
 
-.section-title {
-    font-size: 2.5em;
-    margin-bottom: 40px;
-}
-
-.card-container {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.card {
-    background-color: white;
-    width: 300px;
-    margin: 20px;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-}
-
-.card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-}
-
-.card h3 {
-    font-size: 1.5em;
-    margin: 15px 0;
-}
-
-.card p {
-    font-size: 1em;
-    margin: 0 15px 15px;
-    color: #555;
-}
-
-.card:hover {
-    transform: translateY(-10px);
-}
-
-/* Footer */
-.footer {
-    padding: 20px;
-    text-align: center;
-    background-color: #333;
-    color: white;
-}
-
-/* Ensure icons visibility */
-.navbar-links a i {
-    margin-right: 8px; /* Space between icon and text */
-    font-size: 1em; /* Size of the icon */
-    vertical-align: middle; /* Align icon with text */
-}
-
-/* Subtle Fade and Scale Animation */
-/* Soft Glowing Effect */
-
-
-
-
-/* Soft Glowing Effect */
 @keyframes glow {
     0% {
         text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
@@ -243,3 +173,254 @@ body {
 }
 
 
+/* Cards Section */
+.cards-section {
+    padding: 60px 20px;
+    text-align: center;
+    background-color: #ffffff; /* Clean white background for contrast */
+    border-bottom: 1px solid #e1e4e8; /* Subtle border for separation */
+}
+
+.section-title {
+    font-size: 2.8em;
+    margin-bottom: 40px;
+    color: #212121; /* Darker grey for a professional tone */
+    font-weight: 700; /* Bold for emphasis */
+    letter-spacing: -0.5px; /* Slightly tighter letter spacing */
+}
+
+.card-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card {
+    background-color: #ffffff;
+    width: 320px;
+    margin: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 20px;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px 12px 0 0; /* Rounded top corners */
+}
+
+.card h3 {
+    font-size: 1.8em;
+    margin: 20px 0 10px;
+    font-weight: 600;
+    color: #007aff; /* Accent color for headings */
+}
+
+.card p {
+    font-size: 1em;
+    color: #555; /* Slightly lighter grey for text */
+}
+
+.card:hover {
+    transform: translateY(-10px); /* Elevated effect */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15); /* Deeper shadow on hover */
+}
+
+/* Feature Highlights Section */
+.feature-highlights {
+    padding: 60px 20px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #e1e4e8;
+    text-align: center;
+}
+
+.feature-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.feature-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-width: 320px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card img {
+    width: 90px;
+    height: auto;
+}
+
+.feature-card:hover {
+    transform: translateY(-8px); /* Slight elevation effect */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.feature-card h3 {
+    margin: 15px 0;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #007aff; /* Accent color for headings */
+}
+
+.feature-card p {
+    font-size: 1em;
+    color: #555;
+}
+
+/* Call-to-Action Banner */
+.cta-banner {
+    padding: 60px 20px;
+    background-color: #007aff;
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.1);
+    transform: skewY(-6deg);
+    z-index: 0;
+}
+
+.cta-banner h2 {
+    margin: 0 0 20px;
+    font-size: 2.4em;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-banner p {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-banner .cta-button {
+    background-color: #ffffff;
+    color: #007aff;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.cta-banner .cta-button:hover {
+    background-color: #e6f0ff; /* Light blue background on hover */
+    color: #0051a2; /* Darker blue text color on hover */
+}
+
+/* User Success Stories */
+.success-stories {
+    padding: 60px 20px;
+    background-color: #ffffff;
+}
+
+.story-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.story-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    max-width: 320px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.story-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.story-card:hover {
+    transform: translateY(-10px); /* Elevated effect */
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.story-card h3 {
+    margin: 15px 0;
+    font-size: 1.8em;
+    font-weight: 600;
+    color: #007aff; /* Accent color for headings */
+}
+
+.story-card p {
+    font-size: 1em;
+    color: #555;
+}
+
+/* Interactive Quiz */
+.interactive-quiz {
+    padding: 60px 20px;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.interactive-quiz h2 {
+    font-size: 2.8em;
+    margin-bottom: 20px;
+    font-weight: 700;
+    color: #212121;
+}
+
+.interactive-quiz p {
+    font-size: 1.3em;
+    margin-bottom: 20px;
+    color: #555;
+}
+
+.interactive-quiz .cta-button {
+    background-color: #007aff;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.interactive-quiz .cta-button:hover {
+    background-color: #0051a2; /* Darker blue on hover */
+}
+
+/* Footer */
+.footer {
+    padding: 20px;
+    text-align: center;
+    background-color: #333;
+    color: white;
+    border-top: 1px solid #444;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
