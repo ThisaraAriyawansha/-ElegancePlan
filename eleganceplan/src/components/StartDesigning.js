@@ -6,7 +6,8 @@ import './StartDesigning.css';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom'; // If you're using React Router for navigation
 import { FaHome } from 'react-icons/fa'; // Font Awesome home icon
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 // Drag-and-Drop Types
 const FurnitureType = 'FURNITURE';
@@ -202,7 +203,7 @@ const SectionControls = ({ sections, setSections }) => {
 
   return (
     <div className="section-controls">
-      <h2>Adjust Sections</h2>
+      <h2 className='h22'>Adjust Sections</h2>
       {updatedSections.map((section) => (
         <div key={section.id} className="section-controls-item">
           <h3>{section.name}</h3>
@@ -354,6 +355,23 @@ const App = () => {
     });
   };
 
+  const handleDownloadPDF = () => {
+    const roomDesign = document.querySelector('#room-design');
+    
+    // Add class to hide close icons
+    roomDesign.classList.add('hide-close-icons');
+    
+    html2canvas(roomDesign).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'PNG', 0, 0);
+      pdf.save('room-design.pdf');
+      
+      // Remove class to restore close icons
+      roomDesign.classList.remove('hide-close-icons');
+    });
+  };
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app">
@@ -362,8 +380,11 @@ const App = () => {
         <FaHome className='home-icon' />
       </Link>
       <h1 className='header-title'>Furniture Design Tool</h1>
+      <button onClick={handleDownloadPDF} className="download-button">
+        Download PDF
+      </button>
       <button onClick={handleDeleteAll} className="delete-all-button">
-        Delete All Furniture
+        <span className="button-text">Delete All</span>
       </button>
     </header>
 
@@ -374,7 +395,9 @@ const App = () => {
           <SectionControls sections={sections} setSections={setSections} />
         </div>
       </div>
+
     </DndProvider>
+    
   );
 };
 

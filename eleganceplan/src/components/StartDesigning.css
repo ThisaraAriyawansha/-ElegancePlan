@@ -15,23 +15,29 @@ margin: 0;
   padding: 20px;
 }
 
+/* Header */
 /* Overall header styling */
 .header {
+  max-height: 30px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 30px; /* Increased padding for more space */
-  background-color: #ffffff; /* Clean white background */
-  border-bottom: 1px solid #e0e0e0; /* Light grey border for subtle separation */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for modern effect */
+  padding: 15px 30px; /* Comfortable padding */
+  background: #f5f5f7; /* Light gray background */
+  border-bottom: 1px solid #e0e0e0; /* Subtle border for separation */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+  position: relative;
 }
 
 /* Header title styling */
 .header-title {
   margin: 0;
-  font-size: 1.6rem; /* Slightly larger font size */
-  font-weight: 600; /* Semi-bold font weight for prominence */
-  color: #333; /* Dark grey color for contrast */
+  font-size: 1.4rem; /* Slightly smaller than previous for a clean look */
+  font-weight: 600; /* Semi-bold for readability */
+  color: #333; /* Dark gray color for text */
+  text-shadow: none; /* No text shadow for a clean appearance */
+  flex-grow: 1; /* Center-align the title */
+  text-align: center;
 }
 
 /* Home link styling */
@@ -39,36 +45,78 @@ margin: 0;
   display: flex;
   align-items: center;
   text-decoration: none; /* Remove underline */
-  color: #333; /* Inherit text color */
+  color: #007aff; /* Apple blue color for the icon */
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
 }
 
 /* Home icon styling */
 .home-icon {
-  font-size: 1.8rem; /* Slightly larger icon */
-  color: #007bff; /* Modern blue color */
-  transition: color 0.3s ease; /* Smooth color transition */
+  font-size: 1.8rem; /* Slightly smaller for a minimal look */
+  transition: background 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+
 }
 
 /* Home icon hover effect */
 .home-link:hover .home-icon {
-  color: #0056b3; /* Darker blue on hover */
+  color: #0051a8; /* Darker blue on hover */
+  transform: scale(1.1); /* Slightly enlarge icon on hover */
 }
 
+/* Delete button styling */
 .delete-all-button {
-  background-color: #ff6b6b;
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  font-size: 0.9rem;
+  background: #ff3b30; /* Apple red color for the button */
+  color: #ffffff; /* White text for contrast */
+  border: none; /* Remove border */
+  padding: 10px 18px; /* Comfortable padding */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  font-size: 0.875rem; /* Standard font size */
+  font-weight: 600; /* Semi-bold font weight */
+  transition: background 0.3s ease, transform 0.3s ease; /* Smooth transitions */
 }
 
+/* Delete button hover effect */
 .delete-all-button:hover {
-  background-color: #ff4757;
-  transform: scale(1.1);
+  background: #e03e2f; /* Darker red on hover */
+  transform: scale(1.05); /* Slightly enlarge button on hover */
 }
+
+/* Add a subtle shadow effect */
+.delete-all-button:focus {
+  outline: none; /* Remove default outline */
+  box-shadow: 0 0 0 3px rgba(255, 59, 48, 0.3); /* Soft shadow on focus */
+}
+
+/* Existing styles... */
+
+.hide-close-icons .delete-button {
+  display: none;
+}
+
+
+
+/* Existing styles... */
+
+.download-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+
+}
+
+.download-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+
+
 
 
 .delete-button {
@@ -232,3 +280,6 @@ margin: 0;
   top: 0;
   right: 0;
 }
+
+
+
