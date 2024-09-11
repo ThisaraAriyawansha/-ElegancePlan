@@ -318,7 +318,6 @@ const App = () => {
     { id: 2, name: 'Dining Room', left: 300, top: 0, width: 300, height: 300 },
     { id: 3, name: 'Bedroom', left: 0, top: 300, width: 300, height: 300 },
     { id: 4, name: 'Office', left: 300, top: 300, width: 300, height: 300 },
-    { id: 5, name: 'Garden', left: 600, top: 0, width: 300, height: 300 },
   ]);
 
 
@@ -374,20 +373,24 @@ const App = () => {
 
   const handleDownloadPDF = () => {
     const roomDesign = document.querySelector('#room-design');
-    
+  
     // Add class to hide close icons
     roomDesign.classList.add('hide-close-icons');
-    
-    html2canvas(roomDesign).then((canvas) => {
+  
+    html2canvas(roomDesign, { scrollY: -window.scrollY }).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF();
+      const pdf = new jsPDF({
+        unit: 'px',
+        format: [canvas.width, canvas.height] // Adjust to the size of the canvas
+      });
       pdf.addImage(imgData, 'PNG', 0, 0);
       pdf.save('room-design.pdf');
-      
+  
       // Remove class to restore close icons
       roomDesign.classList.remove('hide-close-icons');
     });
   };
+  
 
 
 

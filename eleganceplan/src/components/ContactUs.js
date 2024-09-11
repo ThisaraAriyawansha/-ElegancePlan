@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaHome, FaPaintBrush, FaSave, FaEnvelope } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import Swal from 'sweetalert2'; // Import SweetAlert2
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -41,19 +42,31 @@ const ContactUs = () => {
     
         await axios.post('http://localhost:5000/api/contact/submit', formData);
     
-        alert('Message sent!');
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Thank you for your message. We will get back to you shortly.',
+            confirmButtonText: 'Okay'
+          });
+          
+        
         setFormData({
           name: '',
           email: '',
           message: '',
         });
       } catch (error) {
-        alert('Failed to send message');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to send message',
+          confirmButtonText: 'Okay'
+        });
         console.error('Error in handleSubmit:', error); // Log errors for debugging
       }
     }
   };
-  
+
   return (
     <motion.div
       className="contact-us-page"
