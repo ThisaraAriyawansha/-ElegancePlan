@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { v4 as uuidv4 } from 'uuid';
@@ -321,6 +321,23 @@ const App = () => {
     { id: 5, name: 'Garden', left: 600, top: 0, width: 300, height: 300 },
   ]);
 
+
+  const [isPageVisible, setIsPageVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsPageVisible(true);
+    }, 100); // Delay to trigger the animation
+    return () => clearTimeout(timer);
+  }, []);
+
+  const handleSelectFurniture = (item) => {
+    setFurniture((prev) => [
+      ...prev,
+      { ...item, id: uuidv4(), left: 0, top: 0 },
+    ]);
+  };
+
   const handleFurnitureSelection = (item) => {
     setFurniture((prev) => [
       ...prev,
@@ -377,7 +394,8 @@ const App = () => {
 
   
   return (
-    
+    <div className={`page-container ${isPageVisible ? 'visible' : ''}`}>
+
     <DndProvider backend={HTML5Backend}>
       <div className="app">
       <header className='header'>
@@ -402,7 +420,7 @@ const App = () => {
       </div>
 
     </DndProvider>
-    
+    </div>
   );
 };
 
