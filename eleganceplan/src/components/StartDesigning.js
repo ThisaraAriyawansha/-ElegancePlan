@@ -4,6 +4,8 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { v4 as uuidv4 } from 'uuid';
 import './StartDesigning.css';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router-dom'; // If you're using React Router for navigation
+import { FaHome } from 'react-icons/fa'; // Font Awesome home icon
 
 
 // Drag-and-Drop Types
@@ -355,12 +357,15 @@ const App = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="app">
-        <header className='header'>
-          <h1 className='h11'>Furniture Design Tool</h1>
-          <button onClick={handleDeleteAll} className="delete-all-button">
-            Delete All Furniture
-          </button>
-        </header>
+      <header className='header'>
+      <Link to="/" className='home-link'>
+        <FaHome className='home-icon' />
+      </Link>
+      <h1 className='header-title'>Furniture Design Tool</h1>
+      <button onClick={handleDeleteAll} className="delete-all-button">
+        Delete All Furniture
+      </button>
+    </header>
 
         <br></br><br></br><br></br>
         <div className="main-content">

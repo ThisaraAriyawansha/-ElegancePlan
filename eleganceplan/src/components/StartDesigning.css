@@ -15,22 +15,43 @@ margin: 0;
   padding: 20px;
 }
 
-/* Header */
+/* Overall header styling */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 15px 20px;
-  background-color: #1f1f1f;
-  color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  padding: 15px 30px; /* Increased padding for more space */
+  background-color: #ffffff; /* Clean white background */
+  border-bottom: 1px solid #e0e0e0; /* Light grey border for subtle separation */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow for modern effect */
 }
 
-.h11 {
-  font-size: 1.8rem;
-  font-weight: 500;
-  color: #00d1b2;
+/* Header title styling */
+.header-title {
+  margin: 0;
+  font-size: 1.6rem; /* Slightly larger font size */
+  font-weight: 600; /* Semi-bold font weight for prominence */
+  color: #333; /* Dark grey color for contrast */
+}
+
+/* Home link styling */
+.home-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none; /* Remove underline */
+  color: #333; /* Inherit text color */
+}
+
+/* Home icon styling */
+.home-icon {
+  font-size: 1.8rem; /* Slightly larger icon */
+  color: #007bff; /* Modern blue color */
+  transition: color 0.3s ease; /* Smooth color transition */
+}
+
+/* Home icon hover effect */
+.home-link:hover .home-icon {
+  color: #0056b3; /* Darker blue on hover */
 }
 
 .delete-all-button {
