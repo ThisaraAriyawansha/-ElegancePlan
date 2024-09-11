@@ -6,8 +6,12 @@ import homeImage from '../components/image/home.jpeg';
 import designToolImage from '../components/image/11.png';
 import savedDesignsImage from '../components/image/331.jpg';
 import shareDesignsImage from '../components/image/images.jpeg';
-import additionalImage1 from '../components/image/imagewddwws.png';
-import additionalImage2 from '../components/image/home.avif';
+import additionalImage1 from '../components/image/Modern Loft.avif';
+import additionalImage2 from '../components/image/Cozy Cottage.webp';
+import additionalImage3 from '../components/image/Luxury Villa.jpg';
+import additionalImage4 from '../components/image/Family Home.jpg';
+import additionalImage5 from '../components/image/small urban studio.jpg';
+
 import { MdOutlineDesignServices, MdOutlineShare } from 'react-icons/md'; // Example icons
 
 const Homepage = () => {
@@ -94,21 +98,38 @@ const Homepage = () => {
       </section>
 
       {/* User Success Stories */}
-      <section className="success-stories">
-        <h2 className="section-title">Success Stories</h2>
-        <div className="story-container">
-          <div className="story-card">
-            <img src={additionalImage1} alt="Success Story 1" />
-            <h3>John's Modern Loft</h3>
-            <p>Read how John transformed his apartment into a modern loft with our tools.</p>
-          </div>
-          <div className="story-card">
-            <img src={additionalImage2} alt="Success Story 2" />
-            <h3>Sarah's Cozy Cottage</h3>
-            <p>Discover Sarah's journey of creating a cozy cottage home using ElegancePlan.</p>
-          </div>
-        </div>
-      </section>
+{/* User Success Stories */}
+<section className="success-stories">
+  <h2 className="section-title">Success Stories</h2>
+  <div className="story-container">
+    <div className="story-card">
+      <img src={additionalImage1} alt="Success Story 1" />
+      <h3>John's Modern Loft</h3>
+      <p>Read how John transformed his city apartment into a sleek, modern loft using our design tools. Now, he enjoys an open, minimalist space filled with natural light and clean lines.</p>
+    </div>
+    <div className="story-card">
+      <img src={additionalImage2} alt="Success Story 2" />
+      <h3>Sarah's Cozy Cottage</h3>
+      <p>Discover how Sarah used ElegancePlan to create the cozy cottage of her dreams. With rustic touches and a warm color palette, she brought her vision to life.</p>
+    </div>
+    <div className="story-card">
+      <img src={additionalImage3} alt="Success Story 3" />
+      <h3>Mark's Luxury Villa</h3>
+      <p>Mark designed his stunning luxury villa with our advanced customization options. From elegant interior finishes to a beautiful outdoor pool area, his home now reflects his refined taste.</p>
+    </div>
+    <div className="story-card">
+      <img src={additionalImage4} alt="Success Story 4" />
+      <h3>Lena's Family Home</h3>
+      <p>Lena worked with ElegancePlan to design a functional and welcoming family home. With spacious living areas and a child-friendly layout, it’s perfect for her growing family.</p>
+    </div>
+    <div className="story-card">
+      <img src={additionalImage5} alt="Success Story 5" />
+      <h3>Raj's Urban Studio</h3>
+      <p>Raj turned his small urban studio into a stylish and efficient living space with our smart design features, optimizing both functionality and aesthetic appeal.</p>
+    </div>
+  </div>
+</section>
+
 
       {/* Interactive Quiz */}
       <section className="interactive-quiz">
