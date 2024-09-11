@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
+import { FaHome, FaPaintBrush, FaSave, FaEnvelope } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import './Quiz.css';
 
 const Quiz = () => {
@@ -50,7 +52,6 @@ const Quiz = () => {
     if (isCorrect) {
       setScore(score + 1);
     }
-
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
@@ -58,37 +59,47 @@ const Quiz = () => {
       setShowScore(true);
       Swal.fire({
         title: 'Thank you for your feedback!',
-        text: 'We will use your feedback to improve our home design recommendations and services.',
+        text: 'We will use your feedback to improve our home design recommendations.',
         icon: 'success',
         confirmButtonText: 'OK',
       });
     }
   };
 
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+
   return (
-    <>
-      <nav className="navbar">
-        <div className="navbar-logo">HomeDesignQuiz</div>
-        <ul className="navbar-menu">
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
+    <div className="quiz-page">
+      <header className="navbarr">
+        <div className="navbar-brand">
+          <Link to="/" className="navbar-link">
+            <FaHome /> ElegancePlan
+          </Link>
+        </div>
+        <nav className="navbar-links">
+          <Link to="/" className="navbar-link">
+            <FaHome /> Home
+          </Link>
+          <Link to="/startDesign" className="navbar-link">
+            <FaPaintBrush /> Start Designing
+          </Link>
+          <Link to="/saved-designs" className="navbar-link">
+            <FaSave /> Saved Designs
+          </Link>
+          <Link to="/contact" className="navbar-link">
+            <FaEnvelope /> Contact Us
+          </Link>
+        </nav>
+      </header>
 
       <div className="quiz-container">
+        <div className="progress-bar-container">
+          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+        </div>
         {showScore ? (
           <div className="score-section">
-            You scored {score} out of {questions.length}!
-            {score === questions.length ? (
-              <p>Your design style is Modern and Minimalist!</p>
-            ) : score >= 3 ? (
-              <p>Your design style is Cozy and Warm!</p>
-            ) : score >= 2 ? (
-              <p>Your design style is Traditional and Elegant!</p>
-            ) : (
-              <p>Your design style is Eclectic and Bold!</p>
-            )}
+            <h3>You scored {score} out of {questions.length}!</h3>
+            <p>Your design style is {score === questions.length ? 'Modern' : 'Traditional'}</p>
           </div>
         ) : (
           <>
@@ -96,11 +107,15 @@ const Quiz = () => {
               <div className="question-count">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
               </div>
-              <div className="question-text">{questions[currentQuestion].questionText}</div>
+              <h3 className="question-text">{questions[currentQuestion].questionText}</h3>
             </div>
             <div className="answer-section">
               {questions[currentQuestion].answerOptions.map((answerOption, index) => (
-                <button key={index} onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>
+                <button
+                  key={index}
+                  className="answer-button"
+                  onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}
+                >
                   {answerOption.answerText}
                 </button>
               ))}
@@ -110,20 +125,9 @@ const Quiz = () => {
       </div>
 
       <footer className="footer">
-        <p>&copy; 2024 HomeDesignQuiz. All rights reserved.</p>
-        <div className="social-icons">
-          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-facebook"></i>
-          </a>
-          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-twitter"></i>
-          </a>
-          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-            <i className="fab fa-instagram"></i>
-          </a>
-        </div>
+        <p>&copy; {new Date().getFullYear()} ElegancePlan. All rights reserved.</p>
       </footer>
-    </>
+    </div>
   );
 };
 

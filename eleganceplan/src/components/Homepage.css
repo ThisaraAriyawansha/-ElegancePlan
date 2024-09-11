@@ -281,7 +281,7 @@ body {
 /* Call-to-Action Banner */
 .cta-banner {
     padding: 60px 20px;
-    background-color: #007aff;
+    background-color: #092e57;
     color: white;
     text-align: center;
     border-radius: 12px;
@@ -417,9 +417,9 @@ body {
 
 /* Footer */
 .footer {
-    padding: 20px;
+    padding: 5px;
     text-align: center;
-    background-color: #333;
+    background-color: #092e57;
     color: white;
     border-top: 1px solid #444;
     box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
