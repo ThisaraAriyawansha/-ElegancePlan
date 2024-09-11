@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 import { FaHome, FaPaintBrush, FaSave, FaEnvelope } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import './Quiz.css';
 
 const Quiz = () => {
@@ -69,8 +70,19 @@ const Quiz = () => {
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   return (
-    <div className="quiz-page">
-      <header className="navbarr">
+    <div className="abc">
+    <motion.div
+      className="quiz-page"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
+      <motion.header
+        className="navbarr"
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ type: 'spring', stiffness: 100 }}
+      >
         <div className="navbar-brand">
           <Link to="/" className="navbar-link">
             <FaHome /> ElegancePlan
@@ -90,43 +102,71 @@ const Quiz = () => {
             <FaEnvelope /> Contact Us
           </Link>
         </nav>
-      </header>
-
-      <div className="quiz-container">
-        <div className="progress-bar-container">
-          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-        </div>
+      </motion.header>
+<br/><br/><br/>
+      <motion.div
+        className="quiz-container"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div
+          className="progress-bar-container"
+          initial={{ width: 0 }}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="progress-bar"></div>
+        </motion.div>
         {showScore ? (
-          <div className="score-section">
+          <motion.div
+            className="score-section"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
             <h3>You scored {score} out of {questions.length}!</h3>
             <p>Your design style is {score === questions.length ? 'Modern' : 'Traditional'}</p>
-          </div>
+          </motion.div>
         ) : (
           <>
-            <div className="question-section">
+            <motion.div
+              className="question-section"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <div className="question-count">
                 <span>Question {currentQuestion + 1}</span>/{questions.length}
               </div>
               <h3 className="question-text">{questions[currentQuestion].questionText}</h3>
-            </div>
-            <div className="answer-section">
+            </motion.div>
+            <motion.div
+              className="answer-section"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
               {questions[currentQuestion].answerOptions.map((answerOption, index) => (
-                <button
+                <motion.button
                   key={index}
                   className="answer-button"
                   onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {answerOption.answerText}
-                </button>
+                </motion.button>
               ))}
-            </div>
+            </motion.div>
           </>
         )}
-      </div>
+      </motion.div>
 
-      <footer className="footer">
+      <footer className="footerr">
         <p>&copy; {new Date().getFullYear()} ElegancePlan. All rights reserved.</p>
       </footer>
+    </motion.div>
     </div>
   );
 };

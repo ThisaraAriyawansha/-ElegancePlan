@@ -218,7 +218,7 @@ body {
     font-size: 1.8em;
     margin: 20px 0 10px;
     font-weight: 600;
-    color: #007aff; /* Accent color for headings */
+    color: #092e57; /* Accent color for headings */
 }
 
 .card p {
@@ -270,7 +270,7 @@ body {
     margin: 15px 0;
     font-size: 1.8em;
     font-weight: 600;
-    color: #007aff; /* Accent color for headings */
+    color: #092e57; /* Accent color for headings */
 }
 
 .feature-card p {
@@ -319,7 +319,7 @@ body {
 
 .cta-banner .cta-button {
     background-color: #ffffff;
-    color: #007aff;
+    color: #092e57;
     padding: 12px 24px;
     border-radius: 6px;
     text-decoration: none;
@@ -331,7 +331,7 @@ body {
 
 .cta-banner .cta-button:hover {
     background-color: #e6f0ff; /* Light blue background on hover */
-    color: #0051a2; /* Darker blue text color on hover */
+    color: #092e57; /* Darker blue text color on hover */
 }
 
 /* User Success Stories */
@@ -373,7 +373,7 @@ body {
     margin: 15px 0;
     font-size: 1.8em;
     font-weight: 600;
-    color: #007aff; /* Accent color for headings */
+    color: #092e57; /* Accent color for headings */
 }
 
 .story-card p {
@@ -402,7 +402,7 @@ body {
 }
 
 .interactive-quiz .cta-button {
-    background-color: #007aff;
+    background-color: #092e57;
     color: white;
     padding: 12px 24px;
     border-radius: 6px;

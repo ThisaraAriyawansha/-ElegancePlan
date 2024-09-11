@@ -16,6 +16,7 @@ import { MdOutlineDesignServices, MdOutlineShare } from 'react-icons/md'; // Exa
 
 const Homepage = () => {
   return (
+    
     <div className="homepage-container">
       <header className="navbar">
         <div className="navbar-brand">
