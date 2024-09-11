@@ -49,6 +49,23 @@ margin: 0;
   transform: scale(1.1);
 }
 
+
+.delete-button {
+  background-color: red; /* Background color */
+  color: white; /* Text color */
+  border: none; /* Remove border */
+  padding: 2px 2px; /* Padding */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.delete-button:hover {
+  background-color: darkred; /* Darken color on hover */
+}
+
+
+
 /* Main content */
 .main-content {
   display: flex;

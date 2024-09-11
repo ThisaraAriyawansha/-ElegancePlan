@@ -3,6 +3,8 @@ import { useDrag, useDrop, DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { v4 as uuidv4 } from 'uuid';
 import './StartDesigning.css';
+import Swal from 'sweetalert2';
+
 
 // Drag-and-Drop Types
 const FurnitureType = 'FURNITURE';
@@ -329,9 +331,25 @@ const App = () => {
   };
 
   const handleDeleteAll = () => {
-    if (window.confirm('Are you sure you want to delete all furniture items?')) {
-      setFurniture([]);
-    }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete all!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setFurniture([]); // Clear all furniture
+        Swal.fire(
+          'Deleted!',
+          'All furniture items have been deleted.',
+          'success'
+        );
+      }
+    });
   };
 
   return (
